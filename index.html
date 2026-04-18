@@ -13,18 +13,12 @@ body {
     color:white;
 }
 
-/* HEADER */
 header {
     text-align:center;
     padding:60px 20px;
     background:linear-gradient(135deg,#1e3a8a,#dc2626);
 }
 
-header h1 {
-    font-size:40px;
-}
-
-/* SEARCH */
 input {
     width:90%;
     max-width:600px;
@@ -35,9 +29,21 @@ input {
     border:none;
 }
 
-/* CATEGORY */
-.categories {
-    text-align:center;
+.container {
+    max-width:900px;
+    margin:auto;
+}
+
+.card {
+    background:rgba(30,41,59,0.7);
+    margin:20px;
+    padding:20px;
+    border-radius:20px;
+}
+
+.word {
+    font-size:26px;
+    color:#3b82f6;
 }
 
 button {
@@ -47,30 +53,6 @@ button {
     border-radius:20px;
     cursor:pointer;
 }
-
-/* CONTAINER */
-.container {
-    max-width:900px;
-    margin:auto;
-}
-
-/* CARD */
-.card {
-    background:rgba(30,41,59,0.7);
-    margin:20px;
-    padding:20px;
-    border-radius:20px;
-    transition:0.3s;
-}
-
-.card:hover {
-    transform:scale(1.02);
-}
-
-.word {
-    font-size:26px;
-    color:#3b82f6;
-}
 </style>
 </head>
 
@@ -78,100 +60,46 @@ button {
 
 <header>
 <h1>Slang Hub 🇺🇸</h1>
-<p>Real American slang dictionary</p>
+<p>English slang with translation</p>
+<button onclick="toggleLang()">🌍 EN / RU</button>
 </header>
 
 <input type="text" id="search" placeholder="Search slang..." oninput="displayWords()">
 
-<div class="categories">
-<button onclick="setCategory('all')">All</button>
-<button onclick="setCategory('internet')">Internet</button>
-<button onclick="setCategory('chat')">Chat</button>
-<button onclick="setCategory('social')">Social</button>
-<button onclick="setCategory('food')">Food</button>
-<button onclick="showFavorites()">⭐ Favorites</button>
-</div>
-
 <div class="container" id="container"></div>
 
 <script>
+let lang = "en";
+
 const words = [
-{word:"GOAT", meaning:"Greatest of all time", example:"Messi is the GOAT.", category:"internet"},
-{word:"Sus", meaning:"Suspicious", example:"That seems sus.", category:"internet"},
-{word:"No cap", meaning:"No lie", example:"No cap, that's true.", category:"chat"},
-{word:"Cap", meaning:"Lie", example:"That's cap.", category:"chat"},
-{word:"Mid", meaning:"Average", example:"That movie was mid.", category:"social"},
-{word:"Fire", meaning:"Very good", example:"This song is fire.", category:"social"},
-{word:"Flex", meaning:"Show off", example:"Stop flexing.", category:"social"},
-{word:"Ghost", meaning:"Ignore someone", example:"He ghosted me.", category:"chat"},
-{word:"Salty", meaning:"Mad", example:"Why you salty?", category:"social"},
-{word:"Bet", meaning:"Okay", example:"You coming? Bet.", category:"chat"},
-{word:"Lit", meaning:"Amazing", example:"That party was lit.", category:"social"},
-{word:"Lowkey", meaning:"A little", example:"I lowkey like it.", category:"chat"},
-{word:"Highkey", meaning:"Very", example:"I highkey love it.", category:"chat"},
-{word:"Savage", meaning:"Ruthless", example:"That was savage.", category:"social"},
-{word:"Drip", meaning:"Stylish outfit", example:"He got drip.", category:"social"},
-{word:"Slay", meaning:"Do something perfectly", example:"She slayed.", category:"social"},
-{word:"Cringe", meaning:"Embarrassing", example:"That was cringe.", category:"social"},
-{word:"Tea", meaning:"Gossip", example:"Spill the tea.", category:"chat"},
-{word:"Clout", meaning:"Fame", example:"He wants clout.", category:"internet"},
-{word:"Stan", meaning:"Big fan", example:"I stan that.", category:"internet"},
-{word:"Glow up", meaning:"Big improvement", example:"He had a glow up.", category:"social"},
-{word:"FOMO", meaning:"Fear of missing out", example:"I got FOMO.", category:"social"},
-{word:"JOMO", meaning:"Joy of missing out", example:"Enjoying staying home = JOMO.", category:"social"},
-{word:"NPC", meaning:"Basic person", example:"He's an NPC.", category:"internet"},
-{word:"Based", meaning:"Confident", example:"That's based.", category:"internet"},
-{word:"Delulu", meaning:"Delusional", example:"She's delulu.", category:"chat"},
-{word:"Valid", meaning:"Makes sense", example:"That's valid.", category:"chat"},
-{word:"Sheesh", meaning:"Expression of surprise", example:"Sheesh!", category:"chat"},
-{word:"Dead", meaning:"Very funny", example:"I'm dead 😂", category:"chat"},
-{word:"Hits different", meaning:"Feels special", example:"This song hits different.", category:"social"},
-{word:"On point", meaning:"Perfect", example:"Your outfit is on point.", category:"social"},
-{word:"Big yikes", meaning:"Very embarrassing", example:"Big yikes.", category:"chat"},
-{word:"Main character", meaning:"Feeling important", example:"I'm the main character.", category:"social"},
-{word:"Rent free", meaning:"Stuck in your head", example:"It's living rent free.", category:"internet"},
-{word:"Touch grass", meaning:"Go outside", example:"Go touch grass.", category:"internet"},
-{word:"Ratio", meaning:"More replies than likes", example:"He got ratioed.", category:"internet"},
-{word:"Caught in 4K", meaning:"Clearly exposed", example:"You got caught in 4K.", category:"internet"},
-{word:"IYKYK", meaning:"If you know, you know", example:"IYKYK.", category:"chat"},
-{word:"BFFR", meaning:"Be for real", example:"BFFR bro.", category:"chat"},
-{word:"Say less", meaning:"I understand", example:"Say less.", category:"chat"},
-{word:"Bussin", meaning:"Very tasty", example:"This food is bussin.", category:"food"},
-{word:"Snack", meaning:"Attractive person", example:"He's a snack.", category:"social"},
-{word:"Thirsty", meaning:"Desperate", example:"Stop being thirsty.", category:"social"}
+{word:"GOAT", en:"Greatest of all time", ru:"Лучший всех времён", example:"Messi is the GOAT."},
+{word:"Sus", en:"Suspicious", ru:"Подозрительный", example:"That seems sus."},
+{word:"No cap", en:"No lie", ru:"Без шуток / правда", example:"No cap, that's true."},
+{word:"Cap", en:"Lie", ru:"Ложь", example:"That's cap."},
+{word:"Mid", en:"Average", ru:"Так себе", example:"That movie was mid."},
+{word:"Fire", en:"Very good", ru:"Очень круто", example:"This song is fire."},
+{word:"Flex", en:"Show off", ru:"Понтоваться", example:"Stop flexing."},
+{word:"Ghost", en:"Ignore someone", ru:"Игнорить", example:"He ghosted me."},
+{word:"Salty", en:"Mad", ru:"Злой / обиженный", example:"Why you salty?"},
+{word:"Bet", en:"Okay", ru:"Ок / договорились", example:"You coming? Bet."},
+{word:"Lit", en:"Amazing", ru:"Огонь", example:"That party was lit."},
+{word:"Lowkey", en:"A little / secretly", ru:"Немного / втайне", example:"I lowkey like it."},
+{word:"Highkey", en:"Very / obviously", ru:"Очень / явно", example:"I highkey love it."},
+{word:"Savage", en:"Ruthless", ru:"Жёсткий", example:"That was savage."},
+{word:"Drip", en:"Stylish outfit", ru:"Стильная одежда", example:"He got drip."},
+{word:"Slay", en:"Do perfectly", ru:"Сделать идеально", example:"She slayed."},
+{word:"Cringe", en:"Embarrassing", ru:"Кринж", example:"That was cringe."},
+{word:"Clout", en:"Fame", ru:"Популярность", example:"He wants clout."},
+{word:"FOMO", en:"Fear of missing out", ru:"Страх что-то пропустить", example:"I got FOMO."},
+{word:"NPC", en:"Basic person", ru:"Безликий человек", example:"He's an NPC."},
+{word:"Based", en:"Confident", ru:"Уверенный в себе", example:"That's based."},
+{word:"Delulu", en:"Delusional", ru:"Сумасшедший (шутливо)", example:"She's delulu."},
+{word:"Valid", en:"Makes sense", ru:"Логично", example:"That's valid."}
 ];
 
-let currentCategory = "all";
-let favorites = JSON.parse(localStorage.getItem("fav")) || [];
-
-function setCategory(cat){
-    currentCategory = cat;
+function toggleLang(){
+    lang = lang === "en" ? "ru" : "en";
     displayWords();
-}
-
-function toggleFav(word){
-    if(favorites.includes(word)){
-        favorites = favorites.filter(w => w !== word);
-    } else {
-        favorites.push(word);
-    }
-    localStorage.setItem("fav", JSON.stringify(favorites));
-    displayWords();
-}
-
-function showFavorites(){
-    const container = document.getElementById("container");
-    container.innerHTML = "";
-
-    words
-    .filter(w => favorites.includes(w.word))
-    .forEach(createCard);
-}
-
-function speak(text){
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang="en-US";
-    speechSynthesis.speak(speech);
 }
 
 function displayWords(){
@@ -182,29 +110,19 @@ function displayWords(){
 
     words
     .filter(item =>
-        (currentCategory === "all" || item.category === currentCategory) &&
-        (item.word.toLowerCase().includes(search) ||
-         item.meaning.toLowerCase().includes(search) ||
-         item.example.toLowerCase().includes(search))
+        item.word.toLowerCase().includes(search) ||
+        item.en.toLowerCase().includes(search) ||
+        item.ru.toLowerCase().includes(search)
     )
-    .forEach(createCard);
-}
-
-function createCard(item){
-    const container = document.getElementById("container");
-
-    container.innerHTML += `
-    <div class="card">
-        <div class="word">${item.word}</div>
-        <p><b>Meaning:</b> ${item.meaning}</p>
-        <p><b>Example:</b> ${item.example}</p>
-        <button onclick="speak('${item.word}')">🔊</button>
-        <button onclick="speak('${item.example}')">🎧</button>
-        <button onclick="toggleFav('${item.word}')">
-            ${favorites.includes(item.word) ? "⭐ Saved" : "☆ Save"}
-        </button>
-    </div>
-    `;
+    .forEach(item => {
+        container.innerHTML += `
+        <div class="card">
+            <div class="word">${item.word}</div>
+            <p><b>${lang === "en" ? "Meaning" : "Перевод"}:</b> ${item[lang]}</p>
+            <p><b>Example:</b> ${item.example}</p>
+        </div>
+        `;
+    });
 }
 
 displayWords();
