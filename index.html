@@ -11,13 +11,27 @@ body {
     font-family: 'Segoe UI', sans-serif;
     background: linear-gradient(135deg, #0f172a, #1e3a8a);
     color: white;
+    overflow-x: hidden;
 }
 
 /* HEADER */
 header {
     text-align: center;
-    padding: 60px 20px;
+    padding: 80px 20px;
     background: linear-gradient(135deg, #1e3a8a, #dc2626);
+    position: relative;
+}
+
+header::after {
+    content: "";
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: #0f172a;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
 }
 
 header h1 {
@@ -33,12 +47,13 @@ header p {
 input {
     width: 90%;
     max-width: 600px;
-    margin: 30px auto;
+    margin: 40px auto;
     display: block;
     padding: 15px;
     border-radius: 30px;
     border: none;
     font-size: 16px;
+    outline: none;
 }
 
 /* CONTAINER */
@@ -50,16 +65,23 @@ input {
 /* CARD */
 .card {
     background: rgba(30, 41, 59, 0.6);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     margin: 20px;
     padding: 25px;
     border-radius: 20px;
     transition: 0.3s;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    animation: fadeIn 0.5s ease;
 }
 
 .card:hover {
     transform: translateY(-8px) scale(1.02);
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+    from {opacity:0; transform: translateY(20px);}
+    to {opacity:1; transform: translateY(0);}
 }
 
 /* WORD */
@@ -79,10 +101,12 @@ button {
     color: white;
     cursor: pointer;
     transition: 0.3s;
+    box-shadow: 0 0 10px rgba(59,130,246,0.5);
 }
 
 button:hover {
     transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(59,130,246,0.9);
 }
 </style>
 </head>
@@ -107,19 +131,22 @@ const slangWords = [
 {word:"AFK", meaning:"Away from keyboard", example:"I'm AFK right now."},
 {word:"TTYL", meaning:"Talk to you later", example:"Gotta go, ttyl!"},
 {word:"FYI", meaning:"For your information", example:"FYI, test is tomorrow."},
-{word:"Swag", meaning:"Cool style or confidence", example:"He got serious swag."},
-{word:"Lit", meaning:"Amazing or exciting", example:"That party was lit."},
+{word:"Swag", meaning:"Cool style", example:"He got swag."},
+{word:"Lit", meaning:"Amazing", example:"That party was lit."},
 {word:"Flex", meaning:"Show off", example:"Stop trying to flex."},
-{word:"No cap", meaning:"No lie / seriously", example:"That was insane, no cap."},
+{word:"No cap", meaning:"No lie", example:"That was crazy, no cap."},
 {word:"Cap", meaning:"Lie", example:"That's cap."},
-{word:"Bet", meaning:"Okay / agreed", example:"You coming? Bet."},
-{word:"Vibe", meaning:"Feeling or mood", example:"This place has good vibes."},
-{word:"Lowkey", meaning:"A little / secretly", example:"I lowkey like that song."},
-{word:"Highkey", meaning:"Very / obviously", example:"I highkey want pizza."},
-{word:"Ghost", meaning:"Ignore someone", example:"He ghosted me."},
-{word:"Salty", meaning:"Mad or bitter", example:"Why you so salty?"},
+{word:"Bet", meaning:"Okay", example:"You coming? Bet."},
+{word:"Vibe", meaning:"Feeling", example:"Good vibes only."},
+{word:"Lowkey", meaning:"A little", example:"I lowkey like it."},
+{word:"Highkey", meaning:"Very", example:"I highkey love this."},
+{word:"Ghost", meaning:"Ignore", example:"He ghosted me."},
+{word:"Salty", meaning:"Mad", example:"Why you salty?"},
 {word:"Fire", meaning:"Very good", example:"This song is fire."},
-{word:"Savage", meaning:"Bold / ruthless", example:"That was savage."}
+{word:"Savage", meaning:"Ruthless", example:"That was savage."},
+{word:"Bussin", meaning:"Really tasty", example:"This food is bussin."},
+{word:"Drip", meaning:"Stylish outfit", example:"He got drip."},
+{word:"Mid", meaning:"Average", example:"That movie was mid."}
 ];
 
 function speak(text) {
