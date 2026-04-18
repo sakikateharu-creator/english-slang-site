@@ -6,52 +6,136 @@
 <title>Slang Hub 🇺🇸</title>
 
 <style>
+* {
+    box-sizing: border-box;
+    transition: 0.2s;
+}
+
 body {
     margin:0;
-    font-family:'Segoe UI';
-    background:linear-gradient(135deg,#0f172a,#1e3a8a);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #020617, #0f172a);
     color:white;
 }
 
+/* HEADER */
 header {
+    padding:80px 20px 60px;
     text-align:center;
-    padding:60px 20px;
-    background:linear-gradient(135deg,#1e3a8a,#dc2626);
+    background: radial-gradient(circle at top, #1e3a8a, #020617);
+    position:relative;
+}
+
+header h1 {
+    font-size:48px;
+    margin:0;
+}
+
+header p {
+    opacity:0.7;
+}
+
+#daily {
+    margin-top:10px;
+    color:#3b82f6;
+    font-weight:bold;
+}
+
+/* SEARCH */
+.search-box {
+    position:sticky;
+    top:0;
+    padding:15px;
+    background:#020617;
+    z-index:10;
 }
 
 input {
-    width:90%;
+    width:100%;
     max-width:600px;
-    margin:20px auto;
     display:block;
+    margin:auto;
     padding:15px;
     border-radius:30px;
     border:none;
+    outline:none;
+    font-size:16px;
+    background:#1e293b;
+    color:white;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
 }
 
+input:focus {
+    box-shadow:0 0 25px rgba(59,130,246,0.8);
+}
+
+/* CONTAINER */
 .container {
     max-width:900px;
     margin:auto;
+    padding-bottom:50px;
 }
 
+/* CARD */
 .card {
-    background:rgba(30,41,59,0.7);
+    background:rgba(30,41,59,0.6);
+    backdrop-filter: blur(14px);
+    border:1px solid rgba(255,255,255,0.08);
     margin:20px;
-    padding:20px;
+    padding:25px;
     border-radius:20px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.7);
 }
 
+.card:hover {
+    transform: translateY(-6px);
+}
+
+/* TEXT */
 .word {
-    font-size:26px;
+    font-size:28px;
     color:#3b82f6;
 }
 
+.meaning {
+    margin-top:10px;
+}
+
+.example {
+    opacity:0.6;
+    font-size:14px;
+}
+
+/* BUTTONS */
+.actions {
+    margin-top:15px;
+}
+
 button {
-    margin:5px;
-    padding:8px 15px;
-    border:none;
+    padding:8px 14px;
     border-radius:20px;
+    border:none;
     cursor:pointer;
+    background:linear-gradient(135deg,#3b82f6,#2563eb);
+    color:white;
+    margin-right:5px;
+    box-shadow:0 0 10px rgba(59,130,246,0.5);
+}
+
+button:hover {
+    transform:scale(1.1);
+}
+
+/* TOGGLE */
+.lang-toggle {
+    margin-top:15px;
+}
+
+/* FOOTER */
+footer {
+    text-align:center;
+    opacity:0.5;
+    padding:20px;
 }
 </style>
 </head>
@@ -60,66 +144,113 @@ button {
 
 <header>
 <h1>Slang Hub 🇺🇸</h1>
-<p>English slang with translation</p>
+<p>Modern English slang dictionary</p>
+<div id="daily"></div>
+
+<div class="lang-toggle">
 <button onclick="toggleLang()">🌍 EN / RU</button>
+</div>
 </header>
 
+<div class="search-box">
 <input type="text" id="search" placeholder="Search slang..." oninput="displayWords()">
+</div>
 
 <div class="container" id="container"></div>
+
+<footer>
+Slang Hub ©
+</footer>
 
 <script>
 let lang = "en";
 
 const words = [
-{word:"GOAT", en:"Greatest of all time", ru:"Лучший всех времён", example:"Messi is the GOAT."},
-{word:"Sus", en:"Suspicious", ru:"Подозрительный", example:"That seems sus."},
-{word:"No cap", en:"No lie", ru:"Без шуток / правда", example:"No cap, that's true."},
-{word:"Cap", en:"Lie", ru:"Ложь", example:"That's cap."},
-{word:"Mid", en:"Average", ru:"Так себе", example:"That movie was mid."},
-{word:"Fire", en:"Very good", ru:"Очень круто", example:"This song is fire."},
-{word:"Flex", en:"Show off", ru:"Понтоваться", example:"Stop flexing."},
-{word:"Ghost", en:"Ignore someone", ru:"Игнорить", example:"He ghosted me."},
-{word:"Salty", en:"Mad", ru:"Злой / обиженный", example:"Why you salty?"},
-{word:"Bet", en:"Okay", ru:"Ок / договорились", example:"You coming? Bet."},
-{word:"Lit", en:"Amazing", ru:"Огонь", example:"That party was lit."},
-{word:"Lowkey", en:"A little / secretly", ru:"Немного / втайне", example:"I lowkey like it."},
-{word:"Highkey", en:"Very / obviously", ru:"Очень / явно", example:"I highkey love it."},
-{word:"Savage", en:"Ruthless", ru:"Жёсткий", example:"That was savage."},
-{word:"Drip", en:"Stylish outfit", ru:"Стильная одежда", example:"He got drip."},
-{word:"Slay", en:"Do perfectly", ru:"Сделать идеально", example:"She slayed."},
-{word:"Cringe", en:"Embarrassing", ru:"Кринж", example:"That was cringe."},
-{word:"Clout", en:"Fame", ru:"Популярность", example:"He wants clout."},
-{word:"FOMO", en:"Fear of missing out", ru:"Страх что-то пропустить", example:"I got FOMO."},
-{word:"NPC", en:"Basic person", ru:"Безликий человек", example:"He's an NPC."},
-{word:"Based", en:"Confident", ru:"Уверенный в себе", example:"That's based."},
-{word:"Delulu", en:"Delusional", ru:"Сумасшедший (шутливо)", example:"She's delulu."},
-{word:"Valid", en:"Makes sense", ru:"Логично", example:"That's valid."}
+{word:"GOAT", en:"Greatest of all time", ru:"Лучший всех времён"},
+{word:"Sus", en:"Suspicious", ru:"Подозрительный"},
+{word:"No cap", en:"No lie", ru:"Без шуток"},
+{word:"Cap", en:"Lie", ru:"Ложь"},
+{word:"Mid", en:"Average", ru:"Так себе"},
+{word:"Fire", en:"Very good", ru:"Очень круто"},
+{word:"Flex", en:"Show off", ru:"Понтоваться"},
+{word:"Ghost", en:"Ignore", ru:"Игнорить"},
+{word:"Salty", en:"Mad", ru:"Злой"},
+{word:"Bet", en:"Okay", ru:"Ок"},
+{word:"Lit", en:"Amazing", ru:"Огонь"},
+{word:"Lowkey", en:"A little", ru:"Немного"},
+{word:"Highkey", en:"Very", ru:"Очень"},
+{word:"Savage", en:"Ruthless", ru:"Жёсткий"},
+{word:"Drip", en:"Style", ru:"Стиль"},
+{word:"Slay", en:"Do perfectly", ru:"Сделать идеально"},
+{word:"Cringe", en:"Embarrassing", ru:"Кринж"},
+{word:"Clout", en:"Fame", ru:"Популярность"},
+{word:"FOMO", en:"Fear of missing out", ru:"Страх пропустить"},
+{word:"NPC", en:"Basic person", ru:"Обычный человек"},
+{word:"Based", en:"Confident", ru:"Уверенный"},
+{word:"Rizz", en:"Charm", ru:"Харизма"},
+{word:"Cooked", en:"In trouble", ru:"Попал"},
+{word:"Glow up", en:"Big improvement", ru:"Преображение"},
+{word:"Tea", en:"Gossip", ru:"Сплетни"},
+{word:"W", en:"Win", ru:"Победа"},
+{word:"L", en:"Loss", ru:"Поражение"},
+{word:"Bruh", en:"Seriously?", ru:"Серьёзно?"},
+{word:"Fr", en:"For real", ru:"Реально"},
+{word:"Ong", en:"On God", ru:"Клянусь"},
+{word:"Irl", en:"In real life", ru:"В реальной жизни"}
 ];
 
+let favorites = JSON.parse(localStorage.getItem("fav")) || [];
+
+/* WORD OF DAY */
+const random = words[Math.floor(Math.random()*words.length)];
+document.getElementById("daily").innerText = "🔥 Word of the day: " + random.word;
+
+/* FUNCTIONS */
 function toggleLang(){
     lang = lang === "en" ? "ru" : "en";
     displayWords();
 }
 
+function speak(text){
+    const s = new SpeechSynthesisUtterance(text);
+    s.lang="en-US";
+    speechSynthesis.speak(s);
+}
+
+function toggleFav(word){
+    if(favorites.includes(word)){
+        favorites = favorites.filter(w=>w!==word);
+    } else {
+        favorites.push(word);
+    }
+    localStorage.setItem("fav", JSON.stringify(favorites));
+    displayWords();
+}
+
 function displayWords(){
-    const container = document.getElementById("container");
+    const c = document.getElementById("container");
     const search = document.getElementById("search").value.toLowerCase();
 
-    container.innerHTML = "";
+    c.innerHTML="";
 
     words
-    .filter(item =>
-        item.word.toLowerCase().includes(search) ||
-        item.en.toLowerCase().includes(search) ||
-        item.ru.toLowerCase().includes(search)
+    .filter(w =>
+        w.word.toLowerCase().includes(search) ||
+        w.en.toLowerCase().includes(search) ||
+        w.ru.toLowerCase().includes(search)
     )
-    .forEach(item => {
-        container.innerHTML += `
+    .forEach(w=>{
+        c.innerHTML += `
         <div class="card">
-            <div class="word">${item.word}</div>
-            <p><b>${lang === "en" ? "Meaning" : "Перевод"}:</b> ${item[lang]}</p>
-            <p><b>Example:</b> ${item.example}</p>
+            <div class="word">${w.word}</div>
+            <div class="meaning"><b>${lang==="en"?"Meaning":"Перевод"}:</b> ${w[lang]}</div>
+
+            <div class="actions">
+                <button onclick="speak('${w.word}')">🔊</button>
+                <button onclick="toggleFav('${w.word}')">
+                    ${favorites.includes(w.word)?"⭐":"☆"}
+                </button>
+            </div>
         </div>
         `;
     });
