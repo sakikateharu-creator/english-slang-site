@@ -3,238 +3,253 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SlangTok 🚀</title>
+<title>Slang Dictionary Pro 🚀</title>
 
 <style>
-:root {
-    --bg:#0f172a;
-    --card:#1e293b;
-    --text:white;
-}
-
 body {
     margin:0;
     font-family:sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    overflow:hidden;
+    background:#0f172a;
+    color:white;
+}
+
+header {
+    padding:20px;
+    text-align:center;
+    background:#1e293b;
+}
+
+input {
+    width:90%;
+    max-width:600px;
+    padding:15px;
+    border-radius:30px;
+    border:none;
+    margin:20px auto;
+    display:block;
+}
+
+.suggestions {
+    max-width:600px;
+    margin:auto;
+    background:#1e293b;
+    border-radius:10px;
+}
+
+.suggestions div {
+    padding:10px;
+    cursor:pointer;
+}
+
+.suggestions div:hover {
+    background:#334155;
+}
+
+.alphabet {
+    text-align:center;
+    padding:10px;
+}
+
+.alphabet span {
+    margin:5px;
+    cursor:pointer;
+    opacity:0.7;
+}
+
+.container {
+    max-width:900px;
+    margin:auto;
 }
 
 .card {
-    position:absolute;
-    width:100%;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    transition:0.4s;
+    background:#1e293b;
+    margin:15px;
+    padding:20px;
+    border-radius:15px;
 }
 
 .word {
-    font-size:50px;
+    font-size:26px;
     color:#3b82f6;
 }
 
-.meaning {
-    opacity:0;
-    margin-top:20px;
-    transition:0.3s;
-    text-align:center;
-    max-width:80%;
-}
-
-.show .meaning {
-    opacity:1;
-}
-
-.controls {
-    position:absolute;
-    bottom:40px;
-}
-
 button {
-    padding:10px 20px;
     margin:5px;
+    padding:8px 12px;
     border:none;
-    border-radius:20px;
+    border-radius:10px;
+    cursor:pointer;
 }
 
-.top {
-    position:absolute;
-    top:10px;
-    width:100%;
-    text-align:center;
-}
-
-.progress {
-    font-size:14px;
-    opacity:0.7;
+.comment {
+    background:#334155;
+    padding:10px;
+    margin:5px 0;
+    border-radius:10px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="top">
-    <div id="level">Level 1</div>
-    <div class="progress" id="progress"></div>
-    <div>🔥 Streak: <span id="streak">0</span></div>
-</div>
+<header>
+<h1>Slang Dictionary Pro 🚀</h1>
+</header>
 
-<div id="card" class="card">
-    <div class="word" id="word"></div>
-    <div class="meaning" id="meaning"></div>
-</div>
+<input type="text" id="search" placeholder="Search slang..." oninput="searchWords()">
 
-<div class="controls">
-    <button onclick="reveal()">👀 Reveal</button>
-    <button onclick="know()">✅ I know</button>
-    <button onclick="skip()">⏭ Skip</button>
-</div>
+<div class="suggestions" id="suggestions"></div>
+<div class="alphabet" id="alphabet"></div>
+<div class="container" id="container"></div>
 
 <script>
 const words = [
-{word:"GOAT", meaning:"Greatest of all time"},
-{word:"Sus", meaning:"Suspicious or shady"},
-{word:"No cap", meaning:"No lie / for real"},
-{word:"Cap", meaning:"A lie"},
-{word:"Mid", meaning:"Average, not impressive"},
-{word:"Bussin", meaning:"Really tasty"},
-{word:"Fire", meaning:"Very good or cool"},
-{word:"Flex", meaning:"To show off"},
-{word:"Ghost", meaning:"To ignore someone"},
-{word:"Salty", meaning:"Mad or bitter"},
-{word:"Bet", meaning:"Okay / deal"},
-{word:"Lit", meaning:"Amazing or exciting"},
-{word:"Vibe", meaning:"Feeling or atmosphere"},
-{word:"Lowkey", meaning:"A little / secretly"},
-{word:"Highkey", meaning:"Very / obviously"},
-{word:"Savage", meaning:"Ruthless or bold"},
-{word:"Drip", meaning:"Stylish outfit"},
-{word:"W", meaning:"Win / success"},
-{word:"L", meaning:"Loss / failure"},
-{word:"Slay", meaning:"To do something extremely well"},
-{word:"Cringe", meaning:"Embarrassing"},
-{word:"Tea", meaning:"Gossip"},
-{word:"Spill the tea", meaning:"Tell the gossip"},
-{word:"GO off", meaning:"To rant or do something intensely"},
-{word:"Mood", meaning:"Relatable feeling"},
-{word:"Extra", meaning:"Over the top"},
-{word:"Snatched", meaning:"Looking very good"},
-{word:"Shade", meaning:"Subtle insult"},
-{word:"Clout", meaning:"Influence or popularity"},
-{word:"Stan", meaning:"A very big fan"},
-{word:"Yeet", meaning:"To throw something or express excitement"},
-{word:"Glow up", meaning:"Big improvement in appearance/life"},
-{word:"FOMO", meaning:"Fear of missing out"},
-{word:"JOMO", meaning:"Joy of missing out"},
-{word:"Hits different", meaning:"Feels special"},
-{word:"On point", meaning:"Perfect / exactly right"},
-{word:"Dead", meaning:"Something is very funny"},
-{word:"Big yikes", meaning:"Very embarrassing"},
-{word:"Sheesh", meaning:"Expression of surprise"},
-{word:"Main character", meaning:"Feeling like the center of attention"},
-{word:"NPC", meaning:"Someone acting basic or scripted"},
-{word:"Rent free", meaning:"Stuck in your head"},
-{word:"Touch grass", meaning:"Go outside / stop being online"},
-{word:"Ratio", meaning:"When replies outnumber likes"},
-{word:"Caught in 4K", meaning:"Clearly exposed"},
-{word:"IYKYK", meaning:"If you know, you know"},
-{word:"Based", meaning:"Being yourself confidently"},
-{word:"Delulu", meaning:"Delusional (jokingly)"},
-{word:"Core memory", meaning:"Important life moment"},
-{word:"It's giving", meaning:"It feels like / reminds of"},
-{word:"Understood the assignment", meaning:"Did something perfectly"},
-{word:"Side eye", meaning:"Suspicious look"},
-{word:"Ate", meaning:"Did amazing"},
-{word:"Left no crumbs", meaning:"Did perfectly, nothing left"},
-{word:"BFFR", meaning:"Be for real"},
-{word:"Say less", meaning:"I understand"},
-{word:"Valid", meaning:"Makes sense / acceptable"}
+{word:"GOAT", meaning:"Greatest of all time", example:"Messi is the GOAT."},
+{word:"Sus", meaning:"Suspicious", example:"That seems sus."},
+{word:"No cap", meaning:"No lie", example:"No cap, that's true."},
+{word:"Mid", meaning:"Average", example:"That movie was mid."},
+{word:"Fire", meaning:"Very good", example:"This song is fire."},
+{word:"Flex", meaning:"Show off", example:"Stop flexing."},
+{word:"Ghost", meaning:"Ignore someone", example:"He ghosted me."},
+{word:"Salty", meaning:"Mad", example:"Why you salty?"},
+{word:"Bet", meaning:"Okay", example:"You coming? Bet."},
+{word:"Lit", meaning:"Amazing", example:"That party was lit."},
+{word:"Drip", meaning:"Stylish outfit", example:"He got drip."},
+{word:"Cringe", meaning:"Embarrassing", example:"That was cringe."},
+{word:"Clout", meaning:"Fame", example:"He wants clout."},
+{word:"NPC", meaning:"Basic person", example:"He's an NPC."},
+{word:"Based", meaning:"Confident", example:"That's based."}
 ];
 
-/* USER DATA */
-let user = JSON.parse(localStorage.getItem("user")) || {
-    xp:0,
-    level:1,
-    streak:0,
-    learned:[]
-};
+let favorites = JSON.parse(localStorage.getItem("fav")) || [];
+let votes = JSON.parse(localStorage.getItem("votes")) || {};
+let comments = JSON.parse(localStorage.getItem("comments")) || {};
 
-/* STREAK */
-const today = new Date().toDateString();
-if(localStorage.getItem("last") !== today){
-    user.streak++;
-    localStorage.setItem("last", today);
-}
-
-/* WORD LOGIC */
-let current;
-
-function nextWord(){
-    current = words[Math.floor(Math.random()*words.length)];
-    document.getElementById("word").innerText = current.word;
-    document.getElementById("meaning").innerText = current.meaning;
-    document.getElementById("card").classList.remove("show");
-}
-
-function reveal(){
-    document.getElementById("card").classList.add("show");
-}
-
-function know(){
-    user.xp += 10;
-    if(!user.learned.includes(current.word)){
-        user.learned.push(current.word);
-    }
-
-    if(user.xp >= user.level * 50){
-        user.level++;
-        alert("LEVEL UP 🚀");
-    }
-
-    save();
-    nextWord();
-}
-
-function skip(){
-    nextWord();
-}
-
-function save(){
-    localStorage.setItem("user", JSON.stringify(user));
-    updateUI();
-}
-
-/* UI */
-function updateUI(){
-    document.getElementById("level").innerText = "Level " + user.level;
-    document.getElementById("streak").innerText = user.streak;
-    document.getElementById("progress").innerText = user.xp + " XP";
-}
-
-/* SWIPE */
-let startY = 0;
-
-document.addEventListener("touchstart", e => {
-    startY = e.touches[0].clientY;
+/* ALPHABET */
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+alphabet.forEach(l=>{
+    document.getElementById("alphabet").innerHTML += 
+    `<span onclick="filterLetter('${l}')">${l}</span>`;
 });
 
-document.addEventListener("touchend", e => {
-    let endY = e.changedTouches[0].clientY;
+function filterLetter(letter){
+    display(words.filter(w=>w.word.startsWith(letter)));
+}
 
-    if(startY - endY > 50){
-        know();
+/* SEARCH */
+function searchWords(){
+    const val = document.getElementById("search").value.toLowerCase();
+    const suggestions = document.getElementById("suggestions");
+
+    if(!val){
+        suggestions.innerHTML="";
+        display(words);
+        return;
     }
-    if(endY - startY > 50){
-        skip();
+
+    const filtered = words.filter(w=>w.word.toLowerCase().includes(val));
+
+    suggestions.innerHTML="";
+    filtered.slice(0,5).forEach(w=>{
+        suggestions.innerHTML += 
+        `<div onclick="openWord('${w.word}')">${w.word}</div>`;
+    });
+
+    display(filtered);
+}
+
+/* DISPLAY */
+function display(list){
+    const c = document.getElementById("container");
+    c.innerHTML="";
+
+    list.forEach(w=>{
+        c.innerHTML += `
+        <div class="card" onclick="openWord('${w.word}')">
+            <div class="word">${w.word}</div>
+            <p>${w.meaning}</p>
+        </div>`;
+    });
+}
+
+/* WORD PAGE */
+function openWord(word){
+    location.hash = word;
+    renderWord(word);
+}
+
+function renderWord(word){
+    const w = words.find(x=>x.word===word);
+    const c = document.getElementById("container");
+
+    const v = votes[word] || {up:0,down:0};
+    const comm = comments[word] || [];
+
+    c.innerHTML = `
+    <div class="card">
+        <div class="word">${w.word}</div>
+        <p><b>Meaning:</b> ${w.meaning}</p>
+        <p><b>Example:</b> ${w.example}</p>
+
+        <button onclick="vote('${word}','up')">👍 ${v.up}</button>
+        <button onclick="vote('${word}','down')">👎 ${v.down}</button>
+
+        <button onclick="toggleFav('${word}')">
+            ${favorites.includes(word) ? "⭐ Saved" : "☆ Save"}
+        </button>
+
+        <hr>
+
+        <h3>Comments</h3>
+        <div id="comments"></div>
+
+        <input id="commentInput" placeholder="Add comment">
+        <button onclick="addComment('${word}')">Post</button>
+    </div>
+    `;
+
+    const comDiv = document.getElementById("comments");
+    comm.forEach(c=>{
+        comDiv.innerHTML += `<div class="comment">${c}</div>`;
+    });
+}
+
+/* VOTES */
+function vote(word,type){
+    if(!votes[word]) votes[word]={up:0,down:0};
+    votes[word][type]++;
+    localStorage.setItem("votes", JSON.stringify(votes));
+    renderWord(word);
+}
+
+/* FAVORITES */
+function toggleFav(word){
+    if(favorites.includes(word)){
+        favorites = favorites.filter(w=>w!==word);
+    } else {
+        favorites.push(word);
     }
-});
+    localStorage.setItem("fav", JSON.stringify(favorites));
+    renderWord(word);
+}
+
+/* COMMENTS */
+function addComment(word){
+    const input = document.getElementById("commentInput");
+    if(!comments[word]) comments[word]=[];
+    comments[word].push(input.value);
+    localStorage.setItem("comments", JSON.stringify(comments));
+    renderWord(word);
+}
 
 /* INIT */
-updateUI();
-nextWord();
+window.onload = ()=>{
+    if(location.hash){
+        renderWord(location.hash.replace("#",""));
+    } else {
+        display(words);
+    }
+};
 </script>
 
 </body>
