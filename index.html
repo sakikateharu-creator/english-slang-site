@@ -3,69 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>English Slang Dictionary</title>
+<title>Slang Hub 🇺🇸</title>
 
 <style>
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: #f4f6fb;
+    background: #0f172a;
+    color: white;
 }
 
 header {
-    background: linear-gradient(135deg, #00247d, #cf142b);
-    color: white;
+    background: linear-gradient(135deg, #1e3a8a, #dc2626);
+    padding: 40px 20px;
     text-align: center;
-    padding: 20px;
+    position: relative;
 }
 
-.logo {
-    width: 80px;
+header h1 {
+    font-size: 42px;
+    margin: 10px 0;
+}
+
+header p {
+    opacity: 0.9;
+}
+
+.flag {
+    font-size: 40px;
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 900px;
     margin: auto;
     padding: 20px;
 }
 
-input, textarea {
+.search {
     width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 30px;
+    border: none;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: #1e293b;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 15px;
+    transition: 0.3s;
+    animation: fadeIn 0.5s ease;
+}
+
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
+
+.word {
+    font-size: 26px;
+    color: #3b82f6;
+    font-weight: bold;
 }
 
 button {
-    margin: 5px;
+    margin-top: 10px;
     padding: 10px 15px;
     border-radius: 20px;
     border: none;
     cursor: pointer;
-    background: #00247d;
+    background: #3b82f6;
     color: white;
 }
 
-.card {
-    background: white;
-    padding: 18px;
-    margin: 12px 0;
-    border-radius: 12px;
-    border-left: 6px solid #cf142b;
-}
-
-.word {
-    font-size: 22px;
-    font-weight: bold;
-    color: #00247d;
-}
-
-footer {
-    background: #00247d;
-    color: white;
-    text-align: center;
-    padding: 15px;
+@keyframes fadeIn {
+    from {opacity:0; transform: translateY(10px);}
+    to {opacity:1; transform: translateY(0);}
 }
 </style>
 </head>
@@ -73,71 +88,49 @@ footer {
 <body>
 
 <header>
-<svg class="logo" viewBox="0 0 100 100">
-    <rect width="100" height="100" rx="15" fill="#00247d"/>
-    <text x="50%" y="45%" fill="white" font-size="28" text-anchor="middle">KIU</text>
-</svg>
-
-<h1>English Slang Dictionary</h1>
-<p>Learn slang like a real British student 🇬🇧</p>
+<div class="flag">🇺🇸</div>
+<h1>Slang Hub</h1>
+<p>Talk like a real American teenager</p>
 </header>
 
 <div class="container">
 
-<h2>Slang Dictionary</h2>
-
-<input type="text" id="search" placeholder="Search slang...">
+<input type="text" id="search" class="search" placeholder="Search slang...">
 
 <div id="cards"></div>
 
-<h2>Mini Translator</h2>
-<textarea id="inputText" placeholder="Enter text in English..."></textarea>
-<button onclick="translateText()">Translate</button>
-<p id="output"></p>
-
 </div>
-
-<footer>
-<p>KIU College Kazan • English Project</p>
-</footer>
 
 <script>
 const slangWords = [
 {word:"GOAT", meaning:"Greatest Of All Time", example:"Messi is the GOAT."},
-{word:"Sus", meaning:"Suspicious", example:"That seems a bit sus."},
-{word:"Chill", meaning:"Relax", example:"Just chill, everything is fine."},
-{word:"Mate", meaning:"Friend (British)", example:"How are you, mate?"},
-{word:"Flex", meaning:"Show off", example:"He is flexing his new phone."},
-{word:"Cool", meaning:"Nice or good", example:"That's a cool idea!"},
-{word:"Banter", meaning:"Playful jokes", example:"We had some good banter."},
-{word:"Lit", meaning:"Amazing or exciting", example:"The party was lit!"},
-{word:"Salty", meaning:"Angry or upset", example:"He is salty about losing."},
-{word:"Noob", meaning:"Beginner", example:"I'm such a noob at this game."},
-{word:"Savage", meaning:"Bold or harsh", example:"That comeback was savage."},
-{word:"Cringe", meaning:"Embarrassing", example:"That video is so cringe."},
-{word:"Ghost", meaning:"Ignore someone", example:"He ghosted me after the date."},
-{word:"Hype", meaning:"Excitement", example:"There is so much hype around this movie."},
-{word:"Low-key", meaning:"A little / secretly", example:"I low-key like this song."},
-{word:"High-key", meaning:"Very / obviously", example:"I high-key love this place."},
-{word:"Vibe", meaning:"Feeling or atmosphere", example:"This place has a good vibe."},
-{word:"Woke", meaning:"Socially aware", example:"She is very woke about social issues."},
-{word:"Broke", meaning:"No money", example:"I’m broke until next week."},
-{word:"Hangry", meaning:"Angry because hungry", example:"I get hangry if I don’t eat."},
-{word:"Tea", meaning:"Gossip", example:"Spill the tea!"},
-{word:"Slay", meaning:"Do something very well", example:"You slayed that performance!"},
-{word:"Fire", meaning:"Very good", example:"This song is fire."},
-{word:"Dead", meaning:"Very funny", example:"That joke made me dead."},
-{word:"Cap", meaning:"Lie", example:"That’s cap."},
-{word:"No cap", meaning:"No lie / honestly", example:"This is the best, no cap."},
-{word:"Bet", meaning:"Okay / agreed", example:"You coming? Bet."},
-{word:"Glow up", meaning:"Big improvement", example:"He had a big glow up."},
-{word:"Throw shade", meaning:"Insult indirectly", example:"She was throwing shade at him."},
-{word:"Extra", meaning:"Too dramatic", example:"Stop being so extra."},
-
-/* НОВЫЕ */
-{word:"BTW", meaning:"By the way", example:"BTW, I saw your friend yesterday."},
-{word:"IDK", meaning:"I don’t know", example:"IDK what to do now."},
-{word:"THX", meaning:"Thanks", example:"THX for your help!"}
+{word:"Sus", meaning:"Suspicious", example:"That seems sus."},
+{word:"Chill", meaning:"Relax", example:"Just chill."},
+{word:"Flex", meaning:"Show off", example:"He is flexing."},
+{word:"Cool", meaning:"Nice", example:"That's cool!"},
+{word:"Lit", meaning:"Amazing", example:"Party was lit."},
+{word:"Salty", meaning:"Upset", example:"He is salty."},
+{word:"Noob", meaning:"Beginner", example:"I'm a noob."},
+{word:"Savage", meaning:"Harsh", example:"That was savage."},
+{word:"Cringe", meaning:"Embarrassing", example:"So cringe."},
+{word:"Ghost", meaning:"Ignore", example:"He ghosted me."},
+{word:"Hype", meaning:"Excitement", example:"Big hype."},
+{word:"Low-key", meaning:"A little", example:"I low-key like it."},
+{word:"High-key", meaning:"Very", example:"I high-key love it."},
+{word:"Vibe", meaning:"Atmosphere", example:"Good vibe."},
+{word:"Broke", meaning:"No money", example:"I'm broke."},
+{word:"Hangry", meaning:"Hungry+angry", example:"I'm hangry."},
+{word:"Tea", meaning:"Gossip", example:"Spill the tea."},
+{word:"Slay", meaning:"Do great", example:"You slayed."},
+{word:"Fire", meaning:"Very good", example:"This is fire."},
+{word:"Cap", meaning:"Lie", example:"That's cap."},
+{word:"No cap", meaning:"Truth", example:"No cap."},
+{word:"Bet", meaning:"Okay", example:"Bet."},
+{word:"Glow up", meaning:"Improve", example:"Big glow up."},
+{word:"Extra", meaning:"Too much", example:"So extra."},
+{word:"BTW", meaning:"By the way", example:"BTW I saw him."},
+{word:"IDK", meaning:"I don’t know", example:"IDK."},
+{word:"THX", meaning:"Thanks", example:"THX bro!"}
 ];
 
 function speak(text) {
@@ -157,21 +150,16 @@ function displayWords() {
             container.innerHTML += `
                 <div class="card">
                     <div class="word">${item.word}</div>
-                    <p><strong>Meaning:</strong> ${item.meaning}</p>
-                    <p><strong>Example:</strong> ${item.example}</p>
-                    <button onclick="speak('${item.word}')">🔊 Listen</button>
+                    <p><b>Meaning:</b> ${item.meaning}</p>
+                    <p><b>Example:</b> ${item.example}</p>
+                    <button onclick="speak('${item.word}')">🔊 Word</button>
+                    <button onclick="speak('${item.example}')">🎧 Example</button>
                 </div>
             `;
         });
 }
 
-function translateText() {
-    document.getElementById("output").innerText =
-    "👉 Use browser translate (Right click → Translate)";
-}
-
 document.getElementById("search").addEventListener("input", displayWords);
-
 displayWords();
 </script>
 
