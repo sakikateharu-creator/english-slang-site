@@ -3,180 +3,238 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Slang Hub 🇺🇸</title>
+<title>SlangTok 🚀</title>
 
 <style>
+:root {
+    --bg:#0f172a;
+    --card:#1e293b;
+    --text:white;
+}
+
 body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #0f172a, #1e3a8a);
-    color: white;
-    overflow-x: hidden;
+    margin:0;
+    font-family:sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    overflow:hidden;
 }
 
-/* HEADER */
-header {
-    text-align: center;
-    padding: 80px 20px;
-    background: linear-gradient(135deg, #1e3a8a, #dc2626);
-    position: relative;
-}
-
-header::after {
-    content: "";
-    position: absolute;
-    bottom: -40px;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    background: #0f172a;
-    border-top-left-radius: 50px;
-    border-top-right-radius: 50px;
-}
-
-header h1 {
-    font-size: 50px;
-    margin: 10px 0;
-}
-
-header p {
-    opacity: 0.8;
-}
-
-/* SEARCH */
-input {
-    width: 90%;
-    max-width: 600px;
-    margin: 40px auto;
-    display: block;
-    padding: 15px;
-    border-radius: 30px;
-    border: none;
-    font-size: 16px;
-    outline: none;
-}
-
-/* CONTAINER */
-.container {
-    max-width: 900px;
-    margin: auto;
-}
-
-/* CARD */
 .card {
-    background: rgba(30, 41, 59, 0.6);
-    backdrop-filter: blur(12px);
-    margin: 20px;
-    padding: 25px;
-    border-radius: 20px;
-    transition: 0.3s;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    animation: fadeIn 0.5s ease;
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    transition:0.4s;
 }
 
-.card:hover {
-    transform: translateY(-8px) scale(1.02);
-}
-
-/* ANIMATION */
-@keyframes fadeIn {
-    from {opacity:0; transform: translateY(20px);}
-    to {opacity:1; transform: translateY(0);}
-}
-
-/* WORD */
 .word {
-    font-size: 30px;
-    color: #3b82f6;
+    font-size:50px;
+    color:#3b82f6;
 }
 
-/* BUTTON */
+.meaning {
+    opacity:0;
+    margin-top:20px;
+    transition:0.3s;
+    text-align:center;
+    max-width:80%;
+}
+
+.show .meaning {
+    opacity:1;
+}
+
+.controls {
+    position:absolute;
+    bottom:40px;
+}
+
 button {
-    margin-top: 10px;
-    margin-right: 10px;
-    padding: 10px 20px;
-    border-radius: 25px;
-    border: none;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 0 0 10px rgba(59,130,246,0.5);
+    padding:10px 20px;
+    margin:5px;
+    border:none;
+    border-radius:20px;
 }
 
-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(59,130,246,0.9);
+.top {
+    position:absolute;
+    top:10px;
+    width:100%;
+    text-align:center;
+}
+
+.progress {
+    font-size:14px;
+    opacity:0.7;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <div style="font-size:40px;">🇺🇸</div>
-    <h1>Slang Hub</h1>
-    <p>Talk like a real American teenager</p>
-</header>
+<div class="top">
+    <div id="level">Level 1</div>
+    <div class="progress" id="progress"></div>
+    <div>🔥 Streak: <span id="streak">0</span></div>
+</div>
 
-<input type="text" id="search" placeholder="Search slang..." oninput="displayWords()">
+<div id="card" class="card">
+    <div class="word" id="word"></div>
+    <div class="meaning" id="meaning"></div>
+</div>
 
-<div class="container" id="container"></div>
+<div class="controls">
+    <button onclick="reveal()">👀 Reveal</button>
+    <button onclick="know()">✅ I know</button>
+    <button onclick="skip()">⏭ Skip</button>
+</div>
 
 <script>
-const slangWords = [
-{word:"GOAT", meaning:"Greatest Of All Time", example:"Messi is the GOAT."},
-{word:"Sus", meaning:"Suspicious", example:"That seems sus."},
-{word:"BRB", meaning:"Be right back", example:"BRB, need food."},
-{word:"AFK", meaning:"Away from keyboard", example:"I'm AFK right now."},
-{word:"TTYL", meaning:"Talk to you later", example:"Gotta go, ttyl!"},
-{word:"FYI", meaning:"For your information", example:"FYI, test is tomorrow."},
-{word:"Swag", meaning:"Cool style", example:"He got swag."},
-{word:"Lit", meaning:"Amazing", example:"That party was lit."},
-{word:"Flex", meaning:"Show off", example:"Stop trying to flex."},
-{word:"No cap", meaning:"No lie", example:"That was crazy, no cap."},
-{word:"Cap", meaning:"Lie", example:"That's cap."},
-{word:"Bet", meaning:"Okay", example:"You coming? Bet."},
-{word:"Vibe", meaning:"Feeling", example:"Good vibes only."},
-{word:"Lowkey", meaning:"A little", example:"I lowkey like it."},
-{word:"Highkey", meaning:"Very", example:"I highkey love this."},
-{word:"Ghost", meaning:"Ignore", example:"He ghosted me."},
-{word:"Salty", meaning:"Mad", example:"Why you salty?"},
-{word:"Fire", meaning:"Very good", example:"This song is fire."},
-{word:"Savage", meaning:"Ruthless", example:"That was savage."},
-{word:"Bussin", meaning:"Really tasty", example:"This food is bussin."},
-{word:"Drip", meaning:"Stylish outfit", example:"He got drip."},
-{word:"Mid", meaning:"Average", example:"That movie was mid."}
+const words = [
+{word:"GOAT", meaning:"Greatest of all time"},
+{word:"Sus", meaning:"Suspicious or shady"},
+{word:"No cap", meaning:"No lie / for real"},
+{word:"Cap", meaning:"A lie"},
+{word:"Mid", meaning:"Average, not impressive"},
+{word:"Bussin", meaning:"Really tasty"},
+{word:"Fire", meaning:"Very good or cool"},
+{word:"Flex", meaning:"To show off"},
+{word:"Ghost", meaning:"To ignore someone"},
+{word:"Salty", meaning:"Mad or bitter"},
+{word:"Bet", meaning:"Okay / deal"},
+{word:"Lit", meaning:"Amazing or exciting"},
+{word:"Vibe", meaning:"Feeling or atmosphere"},
+{word:"Lowkey", meaning:"A little / secretly"},
+{word:"Highkey", meaning:"Very / obviously"},
+{word:"Savage", meaning:"Ruthless or bold"},
+{word:"Drip", meaning:"Stylish outfit"},
+{word:"W", meaning:"Win / success"},
+{word:"L", meaning:"Loss / failure"},
+{word:"Slay", meaning:"To do something extremely well"},
+{word:"Cringe", meaning:"Embarrassing"},
+{word:"Tea", meaning:"Gossip"},
+{word:"Spill the tea", meaning:"Tell the gossip"},
+{word:"GO off", meaning:"To rant or do something intensely"},
+{word:"Mood", meaning:"Relatable feeling"},
+{word:"Extra", meaning:"Over the top"},
+{word:"Snatched", meaning:"Looking very good"},
+{word:"Shade", meaning:"Subtle insult"},
+{word:"Clout", meaning:"Influence or popularity"},
+{word:"Stan", meaning:"A very big fan"},
+{word:"Yeet", meaning:"To throw something or express excitement"},
+{word:"Glow up", meaning:"Big improvement in appearance/life"},
+{word:"FOMO", meaning:"Fear of missing out"},
+{word:"JOMO", meaning:"Joy of missing out"},
+{word:"Hits different", meaning:"Feels special"},
+{word:"On point", meaning:"Perfect / exactly right"},
+{word:"Dead", meaning:"Something is very funny"},
+{word:"Big yikes", meaning:"Very embarrassing"},
+{word:"Sheesh", meaning:"Expression of surprise"},
+{word:"Main character", meaning:"Feeling like the center of attention"},
+{word:"NPC", meaning:"Someone acting basic or scripted"},
+{word:"Rent free", meaning:"Stuck in your head"},
+{word:"Touch grass", meaning:"Go outside / stop being online"},
+{word:"Ratio", meaning:"When replies outnumber likes"},
+{word:"Caught in 4K", meaning:"Clearly exposed"},
+{word:"IYKYK", meaning:"If you know, you know"},
+{word:"Based", meaning:"Being yourself confidently"},
+{word:"Delulu", meaning:"Delusional (jokingly)"},
+{word:"Core memory", meaning:"Important life moment"},
+{word:"It's giving", meaning:"It feels like / reminds of"},
+{word:"Understood the assignment", meaning:"Did something perfectly"},
+{word:"Side eye", meaning:"Suspicious look"},
+{word:"Ate", meaning:"Did amazing"},
+{word:"Left no crumbs", meaning:"Did perfectly, nothing left"},
+{word:"BFFR", meaning:"Be for real"},
+{word:"Say less", meaning:"I understand"},
+{word:"Valid", meaning:"Makes sense / acceptable"}
 ];
 
-function speak(text) {
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "en-US";
-    speechSynthesis.speak(speech);
+/* USER DATA */
+let user = JSON.parse(localStorage.getItem("user")) || {
+    xp:0,
+    level:1,
+    streak:0,
+    learned:[]
+};
+
+/* STREAK */
+const today = new Date().toDateString();
+if(localStorage.getItem("last") !== today){
+    user.streak++;
+    localStorage.setItem("last", today);
 }
 
-function displayWords() {
-    const container = document.getElementById("container");
-    const search = document.getElementById("search").value.toLowerCase();
+/* WORD LOGIC */
+let current;
 
-    container.innerHTML = "";
-
-    slangWords
-    .filter(item => item.word.toLowerCase().includes(search))
-    .forEach(item => {
-        container.innerHTML += `
-        <div class="card">
-            <div class="word">${item.word}</div>
-            <p><b>Meaning:</b> ${item.meaning}</p>
-            <p><b>Example:</b> ${item.example}</p>
-            <button onclick="speak('${item.word}')">🔊 Word</button>
-            <button onclick="speak('${item.example}')">🎧 Example</button>
-        </div>
-        `;
-    });
+function nextWord(){
+    current = words[Math.floor(Math.random()*words.length)];
+    document.getElementById("word").innerText = current.word;
+    document.getElementById("meaning").innerText = current.meaning;
+    document.getElementById("card").classList.remove("show");
 }
 
-displayWords();
+function reveal(){
+    document.getElementById("card").classList.add("show");
+}
+
+function know(){
+    user.xp += 10;
+    if(!user.learned.includes(current.word)){
+        user.learned.push(current.word);
+    }
+
+    if(user.xp >= user.level * 50){
+        user.level++;
+        alert("LEVEL UP 🚀");
+    }
+
+    save();
+    nextWord();
+}
+
+function skip(){
+    nextWord();
+}
+
+function save(){
+    localStorage.setItem("user", JSON.stringify(user));
+    updateUI();
+}
+
+/* UI */
+function updateUI(){
+    document.getElementById("level").innerText = "Level " + user.level;
+    document.getElementById("streak").innerText = user.streak;
+    document.getElementById("progress").innerText = user.xp + " XP";
+}
+
+/* SWIPE */
+let startY = 0;
+
+document.addEventListener("touchstart", e => {
+    startY = e.touches[0].clientY;
+});
+
+document.addEventListener("touchend", e => {
+    let endY = e.changedTouches[0].clientY;
+
+    if(startY - endY > 50){
+        know();
+    }
+    if(endY - startY > 50){
+        skip();
+    }
+});
+
+/* INIT */
+updateUI();
+nextWord();
 </script>
 
 </body>
