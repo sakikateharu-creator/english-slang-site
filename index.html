@@ -3,89 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Slang Dictionary Pro 🚀</title>
+<title>Slang Hub 🇺🇸</title>
 
 <style>
 body {
     margin:0;
-    font-family:sans-serif;
-    background:#0f172a;
+    font-family:'Segoe UI';
+    background:linear-gradient(135deg,#0f172a,#1e3a8a);
     color:white;
 }
 
+/* HEADER */
 header {
-    padding:20px;
     text-align:center;
-    background:#1e293b;
+    padding:60px 20px;
+    background:linear-gradient(135deg,#1e3a8a,#dc2626);
 }
 
+header h1 {
+    font-size:40px;
+}
+
+/* SEARCH */
 input {
     width:90%;
     max-width:600px;
+    margin:20px auto;
+    display:block;
     padding:15px;
     border-radius:30px;
     border:none;
-    margin:20px auto;
-    display:block;
 }
 
-.suggestions {
-    max-width:600px;
-    margin:auto;
-    background:#1e293b;
-    border-radius:10px;
-}
-
-.suggestions div {
-    padding:10px;
-    cursor:pointer;
-}
-
-.suggestions div:hover {
-    background:#334155;
-}
-
-.alphabet {
+/* CATEGORY */
+.categories {
     text-align:center;
-    padding:10px;
 }
 
-.alphabet span {
+button {
     margin:5px;
+    padding:8px 15px;
+    border:none;
+    border-radius:20px;
     cursor:pointer;
-    opacity:0.7;
 }
 
+/* CONTAINER */
 .container {
     max-width:900px;
     margin:auto;
 }
 
+/* CARD */
 .card {
-    background:#1e293b;
-    margin:15px;
+    background:rgba(30,41,59,0.7);
+    margin:20px;
     padding:20px;
-    border-radius:15px;
+    border-radius:20px;
+    transition:0.3s;
+}
+
+.card:hover {
+    transform:scale(1.02);
 }
 
 .word {
     font-size:26px;
     color:#3b82f6;
-}
-
-button {
-    margin:5px;
-    padding:8px 12px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-.comment {
-    background:#334155;
-    padding:10px;
-    margin:5px 0;
-    border-radius:10px;
 }
 </style>
 </head>
@@ -93,163 +77,137 @@ button {
 <body>
 
 <header>
-<h1>Slang Dictionary Pro 🚀</h1>
+<h1>Slang Hub 🇺🇸</h1>
+<p>Real American slang dictionary</p>
 </header>
 
-<input type="text" id="search" placeholder="Search slang..." oninput="searchWords()">
+<input type="text" id="search" placeholder="Search slang..." oninput="displayWords()">
 
-<div class="suggestions" id="suggestions"></div>
-<div class="alphabet" id="alphabet"></div>
+<div class="categories">
+<button onclick="setCategory('all')">All</button>
+<button onclick="setCategory('internet')">Internet</button>
+<button onclick="setCategory('chat')">Chat</button>
+<button onclick="setCategory('social')">Social</button>
+<button onclick="setCategory('food')">Food</button>
+<button onclick="showFavorites()">⭐ Favorites</button>
+</div>
+
 <div class="container" id="container"></div>
 
 <script>
 const words = [
-{word:"GOAT", meaning:"Greatest of all time", example:"Messi is the GOAT."},
-{word:"Sus", meaning:"Suspicious", example:"That seems sus."},
-{word:"No cap", meaning:"No lie", example:"No cap, that's true."},
-{word:"Mid", meaning:"Average", example:"That movie was mid."},
-{word:"Fire", meaning:"Very good", example:"This song is fire."},
-{word:"Flex", meaning:"Show off", example:"Stop flexing."},
-{word:"Ghost", meaning:"Ignore someone", example:"He ghosted me."},
-{word:"Salty", meaning:"Mad", example:"Why you salty?"},
-{word:"Bet", meaning:"Okay", example:"You coming? Bet."},
-{word:"Lit", meaning:"Amazing", example:"That party was lit."},
-{word:"Drip", meaning:"Stylish outfit", example:"He got drip."},
-{word:"Cringe", meaning:"Embarrassing", example:"That was cringe."},
-{word:"Clout", meaning:"Fame", example:"He wants clout."},
-{word:"NPC", meaning:"Basic person", example:"He's an NPC."},
-{word:"Based", meaning:"Confident", example:"That's based."}
+{word:"GOAT", meaning:"Greatest of all time", example:"Messi is the GOAT.", category:"internet"},
+{word:"Sus", meaning:"Suspicious", example:"That seems sus.", category:"internet"},
+{word:"No cap", meaning:"No lie", example:"No cap, that's true.", category:"chat"},
+{word:"Cap", meaning:"Lie", example:"That's cap.", category:"chat"},
+{word:"Mid", meaning:"Average", example:"That movie was mid.", category:"social"},
+{word:"Fire", meaning:"Very good", example:"This song is fire.", category:"social"},
+{word:"Flex", meaning:"Show off", example:"Stop flexing.", category:"social"},
+{word:"Ghost", meaning:"Ignore someone", example:"He ghosted me.", category:"chat"},
+{word:"Salty", meaning:"Mad", example:"Why you salty?", category:"social"},
+{word:"Bet", meaning:"Okay", example:"You coming? Bet.", category:"chat"},
+{word:"Lit", meaning:"Amazing", example:"That party was lit.", category:"social"},
+{word:"Lowkey", meaning:"A little", example:"I lowkey like it.", category:"chat"},
+{word:"Highkey", meaning:"Very", example:"I highkey love it.", category:"chat"},
+{word:"Savage", meaning:"Ruthless", example:"That was savage.", category:"social"},
+{word:"Drip", meaning:"Stylish outfit", example:"He got drip.", category:"social"},
+{word:"Slay", meaning:"Do something perfectly", example:"She slayed.", category:"social"},
+{word:"Cringe", meaning:"Embarrassing", example:"That was cringe.", category:"social"},
+{word:"Tea", meaning:"Gossip", example:"Spill the tea.", category:"chat"},
+{word:"Clout", meaning:"Fame", example:"He wants clout.", category:"internet"},
+{word:"Stan", meaning:"Big fan", example:"I stan that.", category:"internet"},
+{word:"Glow up", meaning:"Big improvement", example:"He had a glow up.", category:"social"},
+{word:"FOMO", meaning:"Fear of missing out", example:"I got FOMO.", category:"social"},
+{word:"JOMO", meaning:"Joy of missing out", example:"Enjoying staying home = JOMO.", category:"social"},
+{word:"NPC", meaning:"Basic person", example:"He's an NPC.", category:"internet"},
+{word:"Based", meaning:"Confident", example:"That's based.", category:"internet"},
+{word:"Delulu", meaning:"Delusional", example:"She's delulu.", category:"chat"},
+{word:"Valid", meaning:"Makes sense", example:"That's valid.", category:"chat"},
+{word:"Sheesh", meaning:"Expression of surprise", example:"Sheesh!", category:"chat"},
+{word:"Dead", meaning:"Very funny", example:"I'm dead 😂", category:"chat"},
+{word:"Hits different", meaning:"Feels special", example:"This song hits different.", category:"social"},
+{word:"On point", meaning:"Perfect", example:"Your outfit is on point.", category:"social"},
+{word:"Big yikes", meaning:"Very embarrassing", example:"Big yikes.", category:"chat"},
+{word:"Main character", meaning:"Feeling important", example:"I'm the main character.", category:"social"},
+{word:"Rent free", meaning:"Stuck in your head", example:"It's living rent free.", category:"internet"},
+{word:"Touch grass", meaning:"Go outside", example:"Go touch grass.", category:"internet"},
+{word:"Ratio", meaning:"More replies than likes", example:"He got ratioed.", category:"internet"},
+{word:"Caught in 4K", meaning:"Clearly exposed", example:"You got caught in 4K.", category:"internet"},
+{word:"IYKYK", meaning:"If you know, you know", example:"IYKYK.", category:"chat"},
+{word:"BFFR", meaning:"Be for real", example:"BFFR bro.", category:"chat"},
+{word:"Say less", meaning:"I understand", example:"Say less.", category:"chat"},
+{word:"Bussin", meaning:"Very tasty", example:"This food is bussin.", category:"food"},
+{word:"Snack", meaning:"Attractive person", example:"He's a snack.", category:"social"},
+{word:"Thirsty", meaning:"Desperate", example:"Stop being thirsty.", category:"social"}
 ];
 
+let currentCategory = "all";
 let favorites = JSON.parse(localStorage.getItem("fav")) || [];
-let votes = JSON.parse(localStorage.getItem("votes")) || {};
-let comments = JSON.parse(localStorage.getItem("comments")) || {};
 
-/* ALPHABET */
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-alphabet.forEach(l=>{
-    document.getElementById("alphabet").innerHTML += 
-    `<span onclick="filterLetter('${l}')">${l}</span>`;
-});
-
-function filterLetter(letter){
-    display(words.filter(w=>w.word.startsWith(letter)));
+function setCategory(cat){
+    currentCategory = cat;
+    displayWords();
 }
 
-/* SEARCH */
-function searchWords(){
-    const val = document.getElementById("search").value.toLowerCase();
-    const suggestions = document.getElementById("suggestions");
-
-    if(!val){
-        suggestions.innerHTML="";
-        display(words);
-        return;
-    }
-
-    const filtered = words.filter(w=>w.word.toLowerCase().includes(val));
-
-    suggestions.innerHTML="";
-    filtered.slice(0,5).forEach(w=>{
-        suggestions.innerHTML += 
-        `<div onclick="openWord('${w.word}')">${w.word}</div>`;
-    });
-
-    display(filtered);
-}
-
-/* DISPLAY */
-function display(list){
-    const c = document.getElementById("container");
-    c.innerHTML="";
-
-    list.forEach(w=>{
-        c.innerHTML += `
-        <div class="card" onclick="openWord('${w.word}')">
-            <div class="word">${w.word}</div>
-            <p>${w.meaning}</p>
-        </div>`;
-    });
-}
-
-/* WORD PAGE */
-function openWord(word){
-    location.hash = word;
-    renderWord(word);
-}
-
-function renderWord(word){
-    const w = words.find(x=>x.word===word);
-    const c = document.getElementById("container");
-
-    const v = votes[word] || {up:0,down:0};
-    const comm = comments[word] || [];
-
-    c.innerHTML = `
-    <div class="card">
-        <div class="word">${w.word}</div>
-        <p><b>Meaning:</b> ${w.meaning}</p>
-        <p><b>Example:</b> ${w.example}</p>
-
-        <button onclick="vote('${word}','up')">👍 ${v.up}</button>
-        <button onclick="vote('${word}','down')">👎 ${v.down}</button>
-
-        <button onclick="toggleFav('${word}')">
-            ${favorites.includes(word) ? "⭐ Saved" : "☆ Save"}
-        </button>
-
-        <hr>
-
-        <h3>Comments</h3>
-        <div id="comments"></div>
-
-        <input id="commentInput" placeholder="Add comment">
-        <button onclick="addComment('${word}')">Post</button>
-    </div>
-    `;
-
-    const comDiv = document.getElementById("comments");
-    comm.forEach(c=>{
-        comDiv.innerHTML += `<div class="comment">${c}</div>`;
-    });
-}
-
-/* VOTES */
-function vote(word,type){
-    if(!votes[word]) votes[word]={up:0,down:0};
-    votes[word][type]++;
-    localStorage.setItem("votes", JSON.stringify(votes));
-    renderWord(word);
-}
-
-/* FAVORITES */
 function toggleFav(word){
     if(favorites.includes(word)){
-        favorites = favorites.filter(w=>w!==word);
+        favorites = favorites.filter(w => w !== word);
     } else {
         favorites.push(word);
     }
     localStorage.setItem("fav", JSON.stringify(favorites));
-    renderWord(word);
+    displayWords();
 }
 
-/* COMMENTS */
-function addComment(word){
-    const input = document.getElementById("commentInput");
-    if(!comments[word]) comments[word]=[];
-    comments[word].push(input.value);
-    localStorage.setItem("comments", JSON.stringify(comments));
-    renderWord(word);
+function showFavorites(){
+    const container = document.getElementById("container");
+    container.innerHTML = "";
+
+    words
+    .filter(w => favorites.includes(w.word))
+    .forEach(createCard);
 }
 
-/* INIT */
-window.onload = ()=>{
-    if(location.hash){
-        renderWord(location.hash.replace("#",""));
-    } else {
-        display(words);
-    }
-};
+function speak(text){
+    const speech = new SpeechSynthesisUtterance(text);
+    speech.lang="en-US";
+    speechSynthesis.speak(speech);
+}
+
+function displayWords(){
+    const container = document.getElementById("container");
+    const search = document.getElementById("search").value.toLowerCase();
+
+    container.innerHTML = "";
+
+    words
+    .filter(item =>
+        (currentCategory === "all" || item.category === currentCategory) &&
+        (item.word.toLowerCase().includes(search) ||
+         item.meaning.toLowerCase().includes(search) ||
+         item.example.toLowerCase().includes(search))
+    )
+    .forEach(createCard);
+}
+
+function createCard(item){
+    const container = document.getElementById("container");
+
+    container.innerHTML += `
+    <div class="card">
+        <div class="word">${item.word}</div>
+        <p><b>Meaning:</b> ${item.meaning}</p>
+        <p><b>Example:</b> ${item.example}</p>
+        <button onclick="speak('${item.word}')">🔊</button>
+        <button onclick="speak('${item.example}')">🎧</button>
+        <button onclick="toggleFav('${item.word}')">
+            ${favorites.includes(item.word) ? "⭐ Saved" : "☆ Save"}
+        </button>
+    </div>
+    `;
+}
+
+displayWords();
 </script>
 
 </body>
