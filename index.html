@@ -6,15 +6,12 @@
 <title>Slang Hub 🇺🇸</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    transition: 0.2s;
-}
+* { box-sizing:border-box; transition:0.2s; }
 
 body {
     margin:0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #020617, #0f172a);
+    font-family:-apple-system,'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#020617,#0f172a);
     color:white;
 }
 
@@ -22,24 +19,12 @@ body {
 header {
     padding:80px 20px 60px;
     text-align:center;
-    background: radial-gradient(circle at top, #1e3a8a, #020617);
-    position:relative;
+    background:radial-gradient(circle at top,#1e3a8a,#020617);
 }
 
-header h1 {
-    font-size:48px;
-    margin:0;
-}
+header h1 { font-size:48px; }
 
-header p {
-    opacity:0.7;
-}
-
-#daily {
-    margin-top:10px;
-    color:#3b82f6;
-    font-weight:bold;
-}
+#daily { color:#3b82f6; margin-top:10px; }
 
 /* SEARCH */
 .search-box {
@@ -47,95 +32,63 @@ header p {
     top:0;
     padding:15px;
     background:#020617;
-    z-index:10;
 }
 
 input {
     width:100%;
     max-width:600px;
-    display:block;
     margin:auto;
+    display:block;
     padding:15px;
     border-radius:30px;
     border:none;
-    outline:none;
-    font-size:16px;
     background:#1e293b;
     color:white;
-    box-shadow:0 0 20px rgba(0,0,0,0.5);
-}
-
-input:focus {
-    box-shadow:0 0 25px rgba(59,130,246,0.8);
 }
 
 /* CONTAINER */
-.container {
-    max-width:900px;
-    margin:auto;
-    padding-bottom:50px;
-}
+.container { max-width:900px; margin:auto; }
 
 /* CARD */
 .card {
     background:rgba(30,41,59,0.6);
-    backdrop-filter: blur(14px);
+    backdrop-filter:blur(14px);
     border:1px solid rgba(255,255,255,0.08);
     margin:20px;
     padding:25px;
     border-radius:20px;
-    box-shadow:0 10px 40px rgba(0,0,0,0.7);
 }
 
-.card:hover {
-    transform: translateY(-6px);
-}
-
-/* TEXT */
 .word {
     font-size:28px;
     color:#3b82f6;
 }
 
-.meaning {
-    margin-top:10px;
-}
+.meaning { margin-top:10px; }
 
 .example {
-    opacity:0.6;
+    margin-top:10px;
+    opacity:0.7;
     font-size:14px;
+    font-style:italic;
 }
 
-/* BUTTONS */
-.actions {
-    margin-top:15px;
+.usage {
+    margin-top:10px;
+    font-size:14px;
+    opacity:0.8;
 }
 
+/* BUTTON */
 button {
+    margin-top:10px;
+    margin-right:5px;
     padding:8px 14px;
-    border-radius:20px;
     border:none;
-    cursor:pointer;
+    border-radius:20px;
     background:linear-gradient(135deg,#3b82f6,#2563eb);
     color:white;
-    margin-right:5px;
-    box-shadow:0 0 10px rgba(59,130,246,0.5);
-}
-
-button:hover {
-    transform:scale(1.1);
-}
-
-/* TOGGLE */
-.lang-toggle {
-    margin-top:15px;
-}
-
-/* FOOTER */
-footer {
-    text-align:center;
-    opacity:0.5;
-    padding:20px;
+    cursor:pointer;
 }
 </style>
 </head>
@@ -144,12 +97,9 @@ footer {
 
 <header>
 <h1>Slang Hub 🇺🇸</h1>
-<p>Modern English slang dictionary</p>
+<p>Modern slang dictionary</p>
 <div id="daily"></div>
-
-<div class="lang-toggle">
 <button onclick="toggleLang()">🌍 EN / RU</button>
-</div>
 </header>
 
 <div class="search-box">
@@ -158,48 +108,83 @@ footer {
 
 <div class="container" id="container"></div>
 
-<footer>
-Slang Hub ©
-</footer>
-
 <script>
 let lang = "en";
 
 const words = [
-{word:"GOAT", en:"Greatest of all time", ru:"Лучший всех времён"},
-{word:"Sus", en:"Suspicious", ru:"Подозрительный"},
-{word:"No cap", en:"No lie", ru:"Без шуток"},
-{word:"Cap", en:"Lie", ru:"Ложь"},
-{word:"Mid", en:"Average", ru:"Так себе"},
-{word:"Fire", en:"Very good", ru:"Очень круто"},
-{word:"Flex", en:"Show off", ru:"Понтоваться"},
-{word:"Ghost", en:"Ignore", ru:"Игнорить"},
-{word:"Salty", en:"Mad", ru:"Злой"},
-{word:"Bet", en:"Okay", ru:"Ок"},
-{word:"Lit", en:"Amazing", ru:"Огонь"},
-{word:"Lowkey", en:"A little", ru:"Немного"},
-{word:"Highkey", en:"Very", ru:"Очень"},
-{word:"Savage", en:"Ruthless", ru:"Жёсткий"},
-{word:"Drip", en:"Style", ru:"Стиль"},
-{word:"Slay", en:"Do perfectly", ru:"Сделать идеально"},
-{word:"Cringe", en:"Embarrassing", ru:"Кринж"},
-{word:"Clout", en:"Fame", ru:"Популярность"},
-{word:"FOMO", en:"Fear of missing out", ru:"Страх пропустить"},
-{word:"NPC", en:"Basic person", ru:"Обычный человек"},
-{word:"Based", en:"Confident", ru:"Уверенный"},
-{word:"Rizz", en:"Charm", ru:"Харизма"},
-{word:"Cooked", en:"In trouble", ru:"Попал"},
-{word:"Glow up", en:"Big improvement", ru:"Преображение"},
-{word:"Tea", en:"Gossip", ru:"Сплетни"},
-{word:"W", en:"Win", ru:"Победа"},
-{word:"L", en:"Loss", ru:"Поражение"},
-{word:"Bruh", en:"Seriously?", ru:"Серьёзно?"},
-{word:"Fr", en:"For real", ru:"Реально"},
-{word:"Ong", en:"On God", ru:"Клянусь"},
-{word:"Irl", en:"In real life", ru:"В реальной жизни"}
+{
+word:"GOAT",
+en:"Greatest of all time",
+ru:"Лучший всех времён",
+ex_en:"Messi is the GOAT.",
+ex_ru:"Месси — лучший всех времён.",
+use:"Used to describe someone who is the best ever in their field."
+},
+{
+word:"Sus",
+en:"Suspicious",
+ru:"Подозрительный",
+ex_en:"That seems sus.",
+ex_ru:"Это выглядит подозрительно.",
+use:"Used when something feels strange or untrustworthy."
+},
+{
+word:"No cap",
+en:"No lie",
+ru:"Без шуток",
+ex_en:"No cap, that's true.",
+ex_ru:"Без шуток, это правда.",
+use:"Used to emphasize honesty."
+},
+{
+word:"Mid",
+en:"Average",
+ru:"Так себе",
+ex_en:"That movie was mid.",
+ex_ru:"Фильм был так себе.",
+use:"Used to describe something not impressive."
+},
+{
+word:"Fire",
+en:"Very good",
+ru:"Очень круто",
+ex_en:"This song is fire.",
+ex_ru:"Эта песня очень крутая.",
+use:"Used to praise something amazing."
+},
+{
+word:"Ghost",
+en:"Ignore someone",
+ru:"Игнорить",
+ex_en:"He ghosted me.",
+ex_ru:"Он меня заигнорил.",
+use:"Used when someone suddenly stops replying."
+},
+{
+word:"Rizz",
+en:"Charm",
+ru:"Харизма",
+ex_en:"He got rizz.",
+ex_ru:"У него есть харизма.",
+use:"Used when someone is good at attracting others."
+},
+{
+word:"W",
+en:"Win",
+ru:"Победа",
+ex_en:"That's a W.",
+ex_ru:"Это победа.",
+use:"Used to describe success."
+},
+{
+word:"L",
+en:"Loss",
+ru:"Поражение",
+ex_en:"Big L.",
+ex_ru:"Жёсткий проигрыш.",
+use:"Used to describe failure."
+}
 ];
-
-let favorites = JSON.parse(localStorage.getItem("fav")) || [];
 
 /* WORD OF DAY */
 const random = words[Math.floor(Math.random()*words.length)];
@@ -207,24 +192,20 @@ document.getElementById("daily").innerText = "🔥 Word of the day: " + random.w
 
 /* FUNCTIONS */
 function toggleLang(){
-    lang = lang === "en" ? "ru" : "en";
+    lang = lang==="en"?"ru":"en";
     displayWords();
 }
 
-function speak(text){
+function speakEN(text){
     const s = new SpeechSynthesisUtterance(text);
     s.lang="en-US";
     speechSynthesis.speak(s);
 }
 
-function toggleFav(word){
-    if(favorites.includes(word)){
-        favorites = favorites.filter(w=>w!==word);
-    } else {
-        favorites.push(word);
-    }
-    localStorage.setItem("fav", JSON.stringify(favorites));
-    displayWords();
+function speakRU(text){
+    const s = new SpeechSynthesisUtterance(text);
+    s.lang="ru-RU";
+    speechSynthesis.speak(s);
 }
 
 function displayWords(){
@@ -243,14 +224,20 @@ function displayWords(){
         c.innerHTML += `
         <div class="card">
             <div class="word">${w.word}</div>
-            <div class="meaning"><b>${lang==="en"?"Meaning":"Перевод"}:</b> ${w[lang]}</div>
 
-            <div class="actions">
-                <button onclick="speak('${w.word}')">🔊</button>
-                <button onclick="toggleFav('${w.word}')">
-                    ${favorites.includes(w.word)?"⭐":"☆"}
-                </button>
+            <div class="meaning">
+                <b>${lang==="en"?"Meaning":"Перевод"}:</b> ${w[lang]}
             </div>
+
+            <div class="example">🇺🇸 "${w.ex_en}"</div>
+            <div class="example">🇷🇺 "${w.ex_ru}"</div>
+
+            <div class="usage">
+                💡 ${lang==="en" ? w.use : "Используется, когда: " + w.use}
+            </div>
+
+            <button onclick="speakEN('${w.word}')">🔊 EN</button>
+            <button onclick="speakRU('${w.ex_ru}')">🔊 RU</button>
         </div>
         `;
     });
